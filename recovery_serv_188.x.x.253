@@ -57,11 +57,23 @@ netstat -tulpn | grep :80
 2)Параметры подключения к базе данных	Ошибка! Отличаются в .settings.php и dbconn.php
 в файле  /var/www/bitrix/www/bitrix/php_interface/dbconn.php изменить значение $DBHost = "127.0.0.1"; на localhost ps:мой косяк, когда искал проблемы с бд
 3)Загрузка файла больше 4Мб	Ошибка! Не работает
-
+исправлены значения в php.ini upload_max_filesize = 1000M post_max_size = 1000M это не спасло, помогло это: файл /etc/httpd/conf/httpd.conf добавить строку FcgidMaxRequestLen 107374182 
 4) Время на БД и веб-сервере	Ошибка! Время отличается на 43200 секунд
-
+в /bitrix/php_interface/dbconn.php добавить date_default_timezone_set("Europe/Moscow");  в after_connect_d7.php 
+$connection = Bitrix\Main\Application::getConnection();
+$connection->queryExecute("SET LOCAL time_zone='".date('P')."'");
+в after_connect.php  $DB->Query("SET LOCAL time_zone='".date('P')."'");
 5)Режим работы MySQL	Ошибка! innodb_strict_mode=ON, требуется OFF
-
+в файл after_connect_d7.php: 
+$connection = Bitrix\Main\Application::getConnection();
+$connection->queryExecute("SET sql_mode=''");
+$connection->queryExecute("SET innodb_strict_mode=0");
+в файл after_connect.php 
+$DB->Query("SET sql_mode=''");
+$DB->Query("SET innodb_strict_mode=0");
 6)Кодировки таблиц в БД	Ошибочный ответ сервера. Не удалось завершить тестирование
+Эта ошибка требует вмешательства в рабочую бд. На горячую это делать нецелесообразно. Ошибка исправима, но ее исправление требует дополнительного согласования
+
+
 
 
