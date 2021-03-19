@@ -78,6 +78,9 @@ $DB->Query("SET innodb_strict_mode=0");
 #Часть 3. Распределение таймаутов по между nginx и apache
 httpd.conf Timeout 600
  php.ini  max_execution_time 300
+- Необходимо проверить ресурсы сервера, cpu и проц. Оперативка и проц свободны. 
+- Попробуем посмотреть логи error.log и access.log по 504 ошибке. Там по ней пусто
+
  
 
 
