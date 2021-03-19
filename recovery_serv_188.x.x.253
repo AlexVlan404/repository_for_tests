@@ -31,4 +31,21 @@ top,  systemctl status httpd.service,  systemctl restart httpd.service, service 
 5) Проверить доступность 80 порта
 netstat -tulpn | grep :80 
 -Доступен
+добавить правила iptables для 80 8080 443 портов
+6) Проверим лог httpd и nginx
+Находим ошибку failed (24: Too many open files) while connecting to upstream
+устраняем, в файле /nginx.conf изменяем значение на worker_rlimit_nofile 20000; что-бы точно хватило на все
+7) перезапускаем службу nginx, смотрим лог, получаем ошибку 
+*4 open() "/var/www/bitrix/www/favicon.ico" failed (2: No such file or directory), client: 178.234.41.230, server: default, request: "GET /favicon.ico HTTP/1.1", host: "188.34.144.253", referrer: "http://188.34.144.253/"
+-копировал другой фавикон из поиска что-бы не смущал пока
+8) следующая ошибка file has no execute permission: (/var/www/bitrix/php)
+назначил права на чтение и выполнение
+9) следующая ошибка Сценарий обнаружил ошибку и будет прерван. Чтобы просматривать расширенные сообщения об ошибках, включите эту функцию в .settings.php .
+включаем логгирование в /bitrix/.settings.php
+получаем ошибку доступа 1044 к бд
+разрешаем сначала рута с паролем, потом битрикс с паролем
+решаем GRANT LOCK TABLES ON sitemanager.* TO 'bitrix'@'localhost';
+10) далее получаем новую ошибку
+Ошибка запроса MySQL: (1142) команда SELECT запрещена пользователю bitrix @ localhost для таблицы b_option (400)
+
 
