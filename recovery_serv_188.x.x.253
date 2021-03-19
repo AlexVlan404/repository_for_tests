@@ -47,5 +47,6 @@ netstat -tulpn | grep :80
 решаем GRANT LOCK TABLES ON sitemanager.* TO 'bitrix'@'localhost';
 10) далее получаем новую ошибку
 Ошибка запроса MySQL: (1142) команда SELECT запрещена пользователю bitrix @ localhost для таблицы b_option (400)
-
+даем необходимые права GRANT SELECT,INSERT,UPDATE,DELETE ON sitemanager.* TO 'bitrix'@'localhost'; 
+ GRANT SELECT,INSERT,UPDATE,DELETE ON b_option.* TO 'bitrix'@'localhost';
 
