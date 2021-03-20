@@ -81,7 +81,21 @@ httpd.conf Timeout 600
 - Необходимо проверить ресурсы сервера, cpu и проц. Оперативка и проц свободны. 
 - Попробуем посмотреть логи error.log и access.log по 504 ошибке. Там по ней пусто
 
- 
-
+ ##new
+ Начата проверка файлов логгирования, первым проверен httpd/error_log
+ Найдена ошибка mod_fcgid: read data timeout in 40 seconds, referer: http://info.ertelecom.ru/
+End of script output before headers: index.php, referer: http://info.ertelecom.ru/
+Найденные решения: увеличение таймаута fcgid.conf  
+FcgidIOTimeout 90
+FcgidIdleTimeout 90
+Не помогло, пробуем 120. Это помогло, 504 осталась.
+Смотрим логи дальше. 
+Лог nginx выдает вот эту ошибку
+[error] 1026#1026: *306 upstream timed out (110: Connection timed out) while reading response header from upstream, client: , server: default, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8080/index.php", host: "", referrer: "http://info.ertelecom.ru/"
+Таймаут восходящего потока. Решений нашлось 2
+Увеличение таймаута потока. В nginx/default.conf вносим proxy_read_timeout 3600;
+и недокументированное решение, которое почему-то работает
+proxy_http_version 1.1;
+        
 
 
