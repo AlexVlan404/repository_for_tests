@@ -96,6 +96,6 @@ FcgidIdleTimeout 90
 Увеличение таймаута потока. В nginx/default.conf вносим proxy_read_timeout 3600;
 и недокументированное решение, которое почему-то работает
 proxy_http_version 1.1;
-        
+  proxy_set_header Connection "";      
 
 
